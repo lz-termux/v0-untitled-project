@@ -1,9 +1,29 @@
 "use client"
 import { motion } from "framer-motion"
-import Image from "next/image"
+import { useState, useEffect } from "react"
 import ChapterNavigation from "@/components/chapter-navigation"
+import OptimizedImage from "@/components/optimized-image"
 
 export default function ChapterOne() {
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  useEffect(() => {
+    // Simulate loading to ensure animations run smoothly
+    const timer = setTimeout(() => {
+      setIsLoaded(true)
+    }, 100)
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="w-12 h-12 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       <ChapterNavigation currentChapter={1} />
@@ -15,7 +35,7 @@ export default function ChapterOne() {
           transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
           className="w-full md:w-1/2 max-w-md"
         >
-          <Image
+          <OptimizedImage
             src="/images/patricia-jovem.jpg"
             alt="Patrícia - foto antiga"
             width={400}

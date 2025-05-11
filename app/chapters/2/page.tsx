@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { X } from "lucide-react"
@@ -54,13 +54,52 @@ const photos: Photo[] = [
 
 export default function ChapterTwo() {
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null)
+  const [isLoaded, setIsLoaded] = useState(false)
 
-  const openPhoto = (photo: Photo) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true)
+    }, 100)
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  const openPhoto = useCallback((photo: Photo) => {
     setSelectedPhoto(photo)
-  }
+    document.body.style.overflow = "hidden"
+  }, [])
 
-  const closePhoto = () => {
+  const closePhoto = useCallback(() => {
     setSelectedPhoto(null)
+    document.body.style.overflow = ""
+  }, [])
+
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && selectedPhoto) {
+        closePhoto()
+      } else if (e.key === "ArrowRight" && selectedPhoto) {
+        const currentIndex = photos.findIndex((photo) => photo.id === selectedPhoto.id)
+        const nextIndex = (currentIndex + 1) % photos.length
+        setSelectedPhoto(photos[nextIndex])
+      } else if (e.key === "ArrowLeft" && selectedPhoto) {
+        const currentIndex = photos.findIndex((photo) => photo.id === selectedPhoto.id)
+        const prevIndex = (currentIndex - 1 + photos.length) % photos.length
+        setSelectedPhoto(photos[prevIndex])
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [selectedPhoto, closePhoto])
+
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="w-12 h-12 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    )
   }
 
   return (
@@ -103,8 +142,17 @@ export default function ChapterTwo() {
               transition={{ duration: 0.8, delay: 0.15 * index, ease: "easeOut" }}
               className="gallery-item cursor-pointer"
               onClick={() => openPhoto(photo)}
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault()
+                  openPhoto(photo)
+                }
+              }}
+              role="button"
+              aria-label={`Ver foto: ${photo.alt}`}
             >
-              <div className="relative overflow-hidden rounded-lg bg-gray-900">
+              <div className="relative overflow-hidden rounded-lg bg-gray-900 shadow-md hover:shadow-xl transition-shadow duration-300">
                 <Image
                   src={photo.src || "/placeholder.svg"}
                   alt={photo.alt}
@@ -112,7 +160,6 @@ export default function ChapterTwo() {
                   height={400}
                   className="w-full h-64 object-cover grayscale hover:scale-105 transition-transform duration-700"
                 />
-                {/* Removed the hover text overlay */}
               </div>
             </motion.div>
           ))}
@@ -127,31 +174,94 @@ export default function ChapterTwo() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95"
             onClick={closePhoto}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative max-w-3xl w-full bg-gray-900 rounded-lg overflow-hidden"
+              className="relative max-w-4xl w-full bg-gray-900 rounded-lg overflow-hidden shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <button
-                onClick={closePhoto}
-                className="absolute top-4 right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors duration-300 z-10"
-              >
-                <X className="h-5 w-5 text-white" />
-              </button>
+              <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-center bg-black/70 z-10">
+                <h2 id="modal-title" className="text-xl font-montserrat font-semibold text-white">
+                  {selectedPhoto.alt}
+                </h2>
+                <button
+                  onClick={closePhoto}
+                  className="p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-white"
+                  aria-label="Fechar"
+                >
+                  <X className="h-5 w-5 text-white" />
+                </button>
+              </div>
 
-              <Image
-                src={selectedPhoto.src || "/placeholder.svg"}
-                alt={selectedPhoto.alt}
-                width={800}
-                height={600}
-                className="w-full h-auto object-contain grayscale"
-              />
+              <div className="relative w-full h-[70vh]">
+                <Image
+                  src={selectedPhoto.src || "/placeholder.svg"}
+                  alt={selectedPhoto.alt}
+                  fill
+                  className="object-contain grayscale"
+                  sizes="(max-width: 768px) 100vw, 80vw"
+                  priority
+                />
+              </div>
+
+              <div className="p-4 bg-black/70">
+                <p className="text-white text-center">{selectedPhoto.caption}</p>
+              </div>
+
+              {/* Navigation buttons */}
+              <div className="absolute inset-y-0 left-0 flex items-center">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    const currentIndex = photos.findIndex((photo) => photo.id === selectedPhoto.id)
+                    const prevIndex = (currentIndex - 1 + photos.length) % photos.length
+                    setSelectedPhoto(photos[prevIndex])
+                  }}
+                  className="p-2 ml-2 rounded-full bg-black/70 hover:bg-black/90 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-white"
+                  aria-label="Foto anterior"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 text-white"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className="absolute inset-y-0 right-0 flex items-center">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    const currentIndex = photos.findIndex((photo) => photo.id === selectedPhoto.id)
+                    const nextIndex = (currentIndex + 1) % photos.length
+                    setSelectedPhoto(photos[nextIndex])
+                  }}
+                  className="p-2 mr-2 rounded-full bg-black/70 hover:bg-black/90 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-white"
+                  aria-label="Próxima foto"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 text-white"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
             </motion.div>
           </motion.div>
         )}

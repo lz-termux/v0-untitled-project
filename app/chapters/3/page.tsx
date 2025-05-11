@@ -1,9 +1,29 @@
 "use client"
 import { motion } from "framer-motion"
-import Image from "next/image"
+import { useState, useEffect } from "react"
 import ChapterNavigation from "@/components/chapter-navigation"
+import OptimizedImage from "@/components/optimized-image"
 
 export default function ChapterThree() {
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  useEffect(() => {
+    // Simulate loading to ensure animations run smoothly
+    const timer = setTimeout(() => {
+      setIsLoaded(true)
+    }, 100)
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="w-12 h-12 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       <ChapterNavigation currentChapter={3} />
@@ -27,7 +47,7 @@ export default function ChapterThree() {
             className="flex justify-center items-center"
           >
             <div className="relative w-full max-w-md">
-              <Image
+              <OptimizedImage
                 src="/images/patricia-carta.jpg"
                 alt="Patrícia - momento especial"
                 width={500}
@@ -43,10 +63,10 @@ export default function ChapterThree() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
-            className="bg-gray-900/50 p-4 sm:p-6 md:p-8 rounded-lg shadow-xl"
+            className="bg-gray-900/50 p-4 sm:p-6 md:p-8 rounded-lg shadow-xl backdrop-blur-sm"
           >
             <div className="font-roboto font-light space-y-4 text-gray-200">
-              <div className="h-[400px] sm:h-[500px] overflow-y-auto pr-2">
+              <div className="h-[400px] sm:h-[500px] overflow-y-auto pr-2 custom-scrollbar">
                 <h3 className="text-xl font-montserrat font-semibold mb-4">Mãe,</h3>
 
                 <p className="mb-4">
@@ -78,11 +98,16 @@ export default function ChapterThree() {
 
                 <p className="mb-4">Feliz Dia das Mães.</p>
 
-                <p className="text-right mt-6">
+                <motion.p
+                  className="text-right mt-6"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1, duration: 1 }}
+                >
                   Com amor,
                   <br />
-                  Luís Eduardo
-                </p>
+                  <span className="font-montserrat font-medium">Luís Eduardo</span>
+                </motion.p>
               </div>
             </div>
           </motion.div>

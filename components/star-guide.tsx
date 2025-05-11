@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Star, X } from "lucide-react"
 
@@ -47,6 +47,16 @@ const starValues: StarValue[] = [
 export default function StarGuide() {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedStar, setSelectedStar] = useState<StarValue | null>(null)
+  const [isButtonVisible, setIsButtonVisible] = useState(false)
+
+  useEffect(() => {
+    // Show button after a delay
+    const timer = setTimeout(() => {
+      setIsButtonVisible(true)
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  }, [])
 
   const toggleStarGuide = () => {
     setIsOpen(!isOpen)
@@ -57,32 +67,56 @@ export default function StarGuide() {
     setSelectedStar(star)
   }
 
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        toggleStarGuide()
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [isOpen])
+
   return (
     <>
-      <motion.button
-        onClick={toggleStarGuide}
-        className="fixed bottom-20 right-6 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-500 z-40"
-        whileHover={{ scale: 1.1, rotate: 20 }}
-        whileTap={{ scale: 0.9 }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 0.8 }}
-        aria-label="Estrela Guia"
-      >
-        <Star className="text-white" size={20} />
-      </motion.button>
+      <AnimatePresence>
+        {isButtonVisible && (
+          <motion.button
+            onClick={toggleStarGuide}
+            className="fixed bottom-20 right-6 p-3 rounded-full bg-black hover:bg-gray-900 transition-all duration-500 z-40 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black shadow-md"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.5 }}
+            aria-label="Abrir Estrela Guia"
+            aria-expanded={isOpen}
+            aria-controls="star-guide-modal"
+          >
+            <Star className="text-white" size={20} />
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            id="star-guide-modal"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
             className="fixed inset-0 bg-black z-50 flex items-center justify-center"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="star-guide-title"
           >
             <motion.button
               onClick={toggleStarGuide}
-              className="absolute top-6 right-6 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300"
+              className="absolute top-6 right-6 p-3 rounded-full bg-black hover:bg-gray-900 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white shadow-md"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               aria-label="Fechar Estrela Guia"
@@ -91,6 +125,10 @@ export default function StarGuide() {
             </motion.button>
 
             <div className="relative w-full h-full">
+              <h2 id="star-guide-title" className="sr-only">
+                Estrela Guia - Valores de Patrícia
+              </h2>
+
               {/* Stars */}
               {starValues.map((star) => (
                 <motion.div
@@ -111,10 +149,15 @@ export default function StarGuide() {
                     }`}
                     whileHover={{ scale: 1.5, boxShadow: "0 0 20px 8px rgba(255, 255, 255, 0.5)" }}
                     whileTap={{ scale: 0.9 }}
+                    aria-label={`Valor: ${star.name}`}
+                    aria-pressed={selectedStar?.id === star.id}
+                    aria-describedby={`star-description-${star.id}`}
+                    tabIndex={0}
                   />
 
                   {/* Star name */}
                   <motion.div
+                    id={`star-description-${star.id}`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: star.id * 0.2 + 0.3, duration: 0.8 }}
@@ -126,7 +169,7 @@ export default function StarGuide() {
               ))}
 
               {/* Constellation lines */}
-              <svg className="absolute inset-0 w-full h-full pointer-events-none">
+              <svg className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true">
                 <motion.line
                   x1="25%"
                   y1="20%"
@@ -191,7 +234,8 @@ export default function StarGuide() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
-                    className="absolute bottom-10 left-1/2 transform -translate-x-1/2 bg-white/10 backdrop-blur-md p-6 rounded-lg max-w-md text-center"
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className="absolute bottom-10 left-1/2 transform -translate-x-1/2 bg-black/90 p-6 rounded-lg max-w-md text-center shadow-lg"
                   >
                     <h3 className="text-xl md:text-2xl font-montserrat font-semibold mb-2">{selectedStar.name}</h3>
                     <p className="text-sm md:text-base font-roboto font-light">{selectedStar.description}</p>

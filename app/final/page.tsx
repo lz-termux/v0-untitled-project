@@ -1,35 +1,66 @@
 "use client"
 
 import { motion } from "framer-motion"
-import Image from "next/image"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Home } from "lucide-react"
+import OptimizedImage from "@/components/optimized-image"
 
 export default function Final() {
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  useEffect(() => {
+    // Simulate loading to ensure animations run smoothly
+    const timer = setTimeout(() => {
+      setIsLoaded(true)
+    }, 100)
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="w-12 h-12 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 md:p-12">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.5 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
           className="max-w-5xl w-full"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div className="order-2 md:order-1">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-montserrat font-bold mb-6 md:mb-8 leading-tight">
+              <motion.h1
+                className="text-2xl sm:text-3xl md:text-4xl font-montserrat font-bold mb-6 md:mb-8 leading-tight"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
+              >
                 Essa não é apenas uma homenagem. É um pedaço da minha alma, eternizado em você.
-              </h1>
+              </motion.h1>
 
-              <p className="text-gray-300 mb-8 text-base sm:text-lg font-roboto font-light">
+              <motion.p
+                className="text-gray-300 mb-8 text-base sm:text-lg font-roboto font-light"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
+              >
                 Obrigado por ser minha mãe, minha amiga, meu exemplo. Que este pequeno gesto possa expressar ao menos
                 uma fração do amor que sinto por você, Patrícia.
-              </p>
+              </motion.p>
 
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1, duration: 1 }}>
                 <Link
                   href="/"
-                  className="inline-flex items-center gap-2 text-white hover:text-gray-300 transition-colors duration-300 font-montserrat border border-white/30 px-4 py-2 rounded-full hover:bg-white/10"
+                  className="inline-flex items-center gap-2 text-white hover:text-gray-300 transition-colors duration-300 font-montserrat border border-white/30 px-4 py-2 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black"
+                  aria-label="Voltar ao início"
                 >
                   <Home className="h-4 w-4" />
                   <span>Voltar ao início</span>
@@ -41,10 +72,10 @@ export default function Final() {
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1 }}
+                transition={{ duration: 1, ease: "easeOut" }}
                 className="relative"
               >
-                <Image
+                <OptimizedImage
                   src="/images/patricia-final.jpg"
                   alt="Patrícia - foto final"
                   width={500}

@@ -2,6 +2,7 @@
 
 import type React from "react"
 import { motion } from "framer-motion"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Heart, Sun, HandIcon as Hands, Brain, Smile } from "lucide-react"
 import ChapterNavigation from "@/components/chapter-navigation"
@@ -53,6 +54,25 @@ const lessons: LessonCard[] = [
 ]
 
 export default function ChapterFour() {
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true)
+    }, 100)
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="w-12 h-12 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       <ChapterNavigation currentChapter={4} />
@@ -86,7 +106,16 @@ export default function ChapterFour() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15 * index, ease: "easeOut" }}
-              className="bg-white/5 backdrop-blur-sm rounded-lg overflow-hidden hover:bg-white/10 transition-colors duration-500 border border-white/10"
+              className={`bg-white/5 backdrop-blur-sm rounded-lg overflow-hidden transition-all duration-500 border border-white/10 shadow-lg ${
+                hoveredCard === lesson.id ? "bg-white/15 scale-[1.02] shadow-xl" : ""
+              }`}
+              onMouseEnter={() => setHoveredCard(lesson.id)}
+              onMouseLeave={() => setHoveredCard(null)}
+              onFocus={() => setHoveredCard(lesson.id)}
+              onBlur={() => setHoveredCard(null)}
+              tabIndex={0}
+              role="article"
+              aria-labelledby={`lesson-title-${lesson.id}`}
             >
               <div className="relative h-48">
                 <Image
@@ -94,13 +123,27 @@ export default function ChapterFour() {
                   alt={`Lição: ${lesson.title}`}
                   fill
                   className="object-cover grayscale"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  priority={index < 3}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/20"></div>
-                <div className="absolute bottom-4 right-4 text-white bg-black/30 p-2 rounded-full">{lesson.icon}</div>
+                <motion.div
+                  className="absolute bottom-4 right-4 text-white bg-black/70 p-2 rounded-full"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  animate={{
+                    scale: hoveredCard === lesson.id ? 1.1 : 1,
+                    rotate: hoveredCard === lesson.id ? 5 : 0,
+                  }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {lesson.icon}
+                </motion.div>
               </div>
 
               <div className="p-5">
-                <h3 className="text-lg sm:text-xl font-montserrat font-semibold mb-3">{lesson.title}</h3>
+                <h3 id={`lesson-title-${lesson.id}`} className="text-lg sm:text-xl font-montserrat font-semibold mb-3">
+                  {lesson.title}
+                </h3>
                 <p className="text-gray-300 text-sm sm:text-base font-roboto font-light">{lesson.description}</p>
               </div>
             </motion.div>
