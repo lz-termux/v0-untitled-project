@@ -1,8 +1,8 @@
 "use client"
 import { motion } from "framer-motion"
 import { useState, useEffect } from "react"
+import Image from "next/image"
 import ChapterNavigation from "@/components/chapter-navigation"
-import OptimizedImage from "@/components/optimized-image"
 
 export default function ChapterOne() {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -35,13 +35,16 @@ export default function ChapterOne() {
           transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
           className="w-full md:w-1/2 max-w-md"
         >
-          <OptimizedImage
-            src="/images/patricia-jovem.jpg"
-            alt="Patrícia - foto antiga"
-            width={400}
-            height={600}
-            className="rounded-lg shadow-2xl mx-auto grayscale contrast-125 w-full h-auto"
-          />
+          <div className="rounded-card" style={{ borderRadius: "0.5rem", overflow: "hidden" }}>
+            <Image
+              src="/images/patricia-jovem.jpg"
+              alt="Patrícia - foto antiga"
+              width={400}
+              height={600}
+              className="rounded-lg shadow-2xl mx-auto grayscale contrast-125 w-full h-auto rounded-image"
+              style={{ borderRadius: "0.5rem" }}
+            />
+          </div>
         </motion.div>
 
         <div className="w-full md:w-1/2 max-w-xl">

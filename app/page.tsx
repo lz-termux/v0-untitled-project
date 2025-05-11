@@ -55,12 +55,13 @@ export default function Home() {
 
           <motion.button
             onClick={startJourney}
-            className="mt-12 px-8 py-3 border-2 border-white rounded-full text-lg font-montserrat font-medium hover:bg-white hover:text-black transition-all duration-500 btn-glow focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black"
+            className="mt-12 px-8 py-3 border-2 border-white rounded-full text-lg font-montserrat font-medium hover:bg-white hover:text-black transition-all duration-500 btn-glow focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black rounded-button"
             whileHover={{ scale: 1.05, boxShadow: "0 0 15px 5px rgba(255, 255, 255, 0.3)" }}
             whileTap={{ scale: 0.95 }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
+            style={{ borderRadius: "9999px" }}
           >
             Começar a jornada
           </motion.button>

@@ -3,8 +3,8 @@
 import { motion } from "framer-motion"
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { Home } from "lucide-react"
-import OptimizedImage from "@/components/optimized-image"
 
 export default function Final() {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -59,8 +59,9 @@ export default function Final() {
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1, duration: 1 }}>
                 <Link
                   href="/"
-                  className="inline-flex items-center gap-2 text-white hover:text-gray-300 transition-colors duration-300 font-montserrat border border-white/30 px-4 py-2 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black"
+                  className="inline-flex items-center gap-2 text-white hover:text-gray-300 transition-colors duration-300 font-montserrat border border-white/30 px-4 py-2 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black rounded-button"
                   aria-label="Voltar ao início"
+                  style={{ borderRadius: "9999px" }}
                 >
                   <Home className="h-4 w-4" />
                   <span>Voltar ao início</span>
@@ -73,14 +74,16 @@ export default function Final() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 1, ease: "easeOut" }}
-                className="relative"
+                className="relative rounded-card"
+                style={{ borderRadius: "0.5rem", overflow: "hidden" }}
               >
-                <OptimizedImage
+                <Image
                   src="/images/patricia-final.jpg"
                   alt="Patrícia - foto final"
                   width={500}
                   height={600}
-                  className="rounded-lg shadow-2xl w-full h-auto grayscale contrast-125"
+                  className="rounded-lg shadow-2xl w-full h-auto grayscale contrast-125 rounded-image"
+                  style={{ borderRadius: "0.5rem" }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg"></div>
               </motion.div>

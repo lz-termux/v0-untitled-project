@@ -57,18 +57,20 @@ export default function ChapterNavigation({ currentChapter }: ChapterNavigationP
       >
         <Link
           href="/"
-          className="text-white hover:text-gray-300 transition-colors duration-300 p-2 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black"
+          className="text-white hover:text-gray-300 transition-colors duration-300 p-2 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black rounded-button"
           aria-label="Voltar para a página inicial"
+          style={{ borderRadius: "9999px" }}
         >
           <Home className="h-5 w-5" />
         </Link>
 
         <button
           onClick={toggleMenu}
-          className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black"
+          className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black rounded-button"
           aria-label={isOpen ? "Fechar menu" : "Abrir menu"}
           aria-expanded={isOpen}
           aria-controls="chapter-menu"
+          style={{ borderRadius: "9999px" }}
         >
           {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
@@ -78,8 +80,9 @@ export default function ChapterNavigation({ currentChapter }: ChapterNavigationP
       {currentChapter && currentChapter < chapters.length && (
         <Link
           href={getNextChapterPath()}
-          className="fixed bottom-6 left-6 z-40 flex items-center justify-center w-12 h-12 bg-black/90 hover:bg-black shadow-lg rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black"
+          className="fixed bottom-6 left-6 z-40 flex items-center justify-center w-12 h-12 bg-black/90 hover:bg-black shadow-lg rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black rounded-button"
           aria-label={`Ir para o próximo capítulo: ${chapters[currentChapter].title}`}
+          style={{ borderRadius: "9999px" }}
         >
           <ChevronRight className="h-5 w-5" />
         </Link>
@@ -110,13 +113,14 @@ export default function ChapterNavigation({ currentChapter }: ChapterNavigationP
                   >
                     <Link
                       href={chapter.path}
-                      className={`block py-3 px-4 rounded-lg transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-white ${
+                      className={`block py-3 px-4 rounded-lg transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-white rounded-card ${
                         currentChapter === chapter.id
                           ? "bg-white text-black font-medium"
                           : "text-white hover:bg-white/10"
                       }`}
                       onClick={() => setIsOpen(false)}
                       aria-current={currentChapter === chapter.id ? "page" : undefined}
+                      style={{ borderRadius: "0.5rem" }}
                     >
                       <span className="font-montserrat font-semibold">Capítulo {chapter.id}:</span> {chapter.title}
                     </Link>

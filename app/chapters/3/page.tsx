@@ -1,8 +1,8 @@
 "use client"
 import { motion } from "framer-motion"
 import { useState, useEffect } from "react"
+import Image from "next/image"
 import ChapterNavigation from "@/components/chapter-navigation"
-import OptimizedImage from "@/components/optimized-image"
 
 export default function ChapterThree() {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -46,13 +46,17 @@ export default function ChapterThree() {
             transition={{ duration: 1.2, ease: "easeOut" }}
             className="flex justify-center items-center"
           >
-            <div className="relative w-full max-w-md">
-              <OptimizedImage
+            <div
+              className="relative w-full max-w-md rounded-card"
+              style={{ borderRadius: "0.5rem", overflow: "hidden" }}
+            >
+              <Image
                 src="/images/patricia-carta.jpg"
                 alt="Patrícia - momento especial"
                 width={500}
                 height={700}
-                className="rounded-lg shadow-2xl w-full h-auto grayscale contrast-125"
+                className="rounded-lg shadow-2xl w-full h-auto grayscale contrast-125 rounded-image"
+                style={{ borderRadius: "0.5rem" }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg"></div>
             </div>
@@ -63,7 +67,8 @@ export default function ChapterThree() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
-            className="bg-gray-900/50 p-4 sm:p-6 md:p-8 rounded-lg shadow-xl backdrop-blur-sm"
+            className="bg-gray-900/50 p-4 sm:p-6 md:p-8 rounded-lg shadow-xl backdrop-blur-sm rounded-card"
+            style={{ borderRadius: "0.5rem" }}
           >
             <div className="font-roboto font-light space-y-4 text-gray-200">
               <div className="h-[400px] sm:h-[500px] overflow-y-auto pr-2 custom-scrollbar">

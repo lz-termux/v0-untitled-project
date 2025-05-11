@@ -85,7 +85,7 @@ export default function StarGuide() {
         {isButtonVisible && (
           <motion.button
             onClick={toggleStarGuide}
-            className="fixed bottom-20 right-6 p-3 rounded-full bg-black hover:bg-gray-900 transition-all duration-500 z-40 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black shadow-md"
+            className="fixed bottom-20 right-6 p-3 rounded-full bg-black hover:bg-gray-900 transition-all duration-500 z-40 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black shadow-md rounded-button"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             initial={{ opacity: 0, scale: 0.8 }}
@@ -95,6 +95,7 @@ export default function StarGuide() {
             aria-label="Abrir Estrela Guia"
             aria-expanded={isOpen}
             aria-controls="star-guide-modal"
+            style={{ borderRadius: "9999px" }}
           >
             <Star className="text-white" size={20} />
           </motion.button>
@@ -116,10 +117,11 @@ export default function StarGuide() {
           >
             <motion.button
               onClick={toggleStarGuide}
-              className="absolute top-6 right-6 p-3 rounded-full bg-black hover:bg-gray-900 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white shadow-md"
+              className="absolute top-6 right-6 p-3 rounded-full bg-black hover:bg-gray-900 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white shadow-md rounded-button"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               aria-label="Fechar Estrela Guia"
+              style={{ borderRadius: "9999px" }}
             >
               <X className="text-white" size={20} />
             </motion.button>
@@ -146,13 +148,14 @@ export default function StarGuide() {
                     onClick={() => handleStarClick(star)}
                     className={`w-4 h-4 md:w-6 md:h-6 bg-white rounded-full relative ${
                       selectedStar?.id === star.id ? "ring-4 ring-white/30" : ""
-                    }`}
+                    } rounded-button`}
                     whileHover={{ scale: 1.5, boxShadow: "0 0 20px 8px rgba(255, 255, 255, 0.5)" }}
                     whileTap={{ scale: 0.9 }}
                     aria-label={`Valor: ${star.name}`}
                     aria-pressed={selectedStar?.id === star.id}
                     aria-describedby={`star-description-${star.id}`}
                     tabIndex={0}
+                    style={{ borderRadius: "9999px" }}
                   />
 
                   {/* Star name */}
@@ -235,7 +238,8 @@ export default function StarGuide() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
-                    className="absolute bottom-10 left-1/2 transform -translate-x-1/2 bg-black/90 p-6 rounded-lg max-w-md text-center shadow-lg"
+                    className="absolute bottom-10 left-1/2 transform -translate-x-1/2 bg-black/90 p-6 rounded-lg max-w-md text-center shadow-lg rounded-card"
+                    style={{ borderRadius: "0.5rem" }}
                   >
                     <h3 className="text-xl md:text-2xl font-montserrat font-semibold mb-2">{selectedStar.name}</h3>
                     <p className="text-sm md:text-base font-roboto font-light">{selectedStar.description}</p>

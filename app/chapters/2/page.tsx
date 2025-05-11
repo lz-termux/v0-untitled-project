@@ -152,13 +152,14 @@ export default function ChapterTwo() {
               role="button"
               aria-label={`Ver foto: ${photo.alt}`}
             >
-              <div className="relative overflow-hidden rounded-lg bg-gray-900 shadow-md hover:shadow-xl transition-shadow duration-300">
+              <div className="relative overflow-hidden rounded-lg bg-gray-900 shadow-md hover:shadow-xl transition-shadow duration-300 rounded-card">
                 <Image
                   src={photo.src || "/placeholder.svg"}
                   alt={photo.alt}
                   width={300}
                   height={400}
-                  className="w-full h-64 object-cover grayscale hover:scale-105 transition-transform duration-700"
+                  className="w-full h-64 object-cover grayscale hover:scale-105 transition-transform duration-700 rounded-image"
+                  style={{ borderRadius: "0.5rem" }}
                 />
               </div>
             </motion.div>
@@ -185,8 +186,9 @@ export default function ChapterTwo() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative max-w-4xl w-full bg-gray-900 rounded-lg overflow-hidden shadow-2xl"
+              className="relative max-w-4xl w-full bg-gray-900 rounded-lg overflow-hidden shadow-2xl rounded-card"
               onClick={(e) => e.stopPropagation()}
+              style={{ borderRadius: "0.5rem", overflow: "hidden" }}
             >
               <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-center bg-black/70 z-10">
                 <h2 id="modal-title" className="text-xl font-montserrat font-semibold text-white">
@@ -194,8 +196,9 @@ export default function ChapterTwo() {
                 </h2>
                 <button
                   onClick={closePhoto}
-                  className="p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-white"
+                  className="p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-white rounded-button"
                   aria-label="Fechar"
+                  style={{ borderRadius: "9999px" }}
                 >
                   <X className="h-5 w-5 text-white" />
                 </button>
@@ -225,8 +228,9 @@ export default function ChapterTwo() {
                     const prevIndex = (currentIndex - 1 + photos.length) % photos.length
                     setSelectedPhoto(photos[prevIndex])
                   }}
-                  className="p-2 ml-2 rounded-full bg-black/70 hover:bg-black/90 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-white"
+                  className="p-2 ml-2 rounded-full bg-black/70 hover:bg-black/90 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-white rounded-button"
                   aria-label="Foto anterior"
+                  style={{ borderRadius: "9999px" }}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -248,8 +252,9 @@ export default function ChapterTwo() {
                     const nextIndex = (currentIndex + 1) % photos.length
                     setSelectedPhoto(photos[nextIndex])
                   }}
-                  className="p-2 mr-2 rounded-full bg-black/70 hover:bg-black/90 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-white"
+                  className="p-2 mr-2 rounded-full bg-black/70 hover:bg-black/90 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-white rounded-button"
                   aria-label="Próxima foto"
+                  style={{ borderRadius: "9999px" }}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

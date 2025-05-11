@@ -106,7 +106,7 @@ export default function ChapterFour() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15 * index, ease: "easeOut" }}
-              className={`bg-white/5 backdrop-blur-sm rounded-lg overflow-hidden transition-all duration-500 border border-white/10 shadow-lg ${
+              className={`bg-white/5 backdrop-blur-sm rounded-lg overflow-hidden transition-all duration-500 border border-white/10 shadow-lg rounded-card ${
                 hoveredCard === lesson.id ? "bg-white/15 scale-[1.02] shadow-xl" : ""
               }`}
               onMouseEnter={() => setHoveredCard(lesson.id)}
@@ -116,25 +116,28 @@ export default function ChapterFour() {
               tabIndex={0}
               role="article"
               aria-labelledby={`lesson-title-${lesson.id}`}
+              style={{ borderRadius: "0.5rem", overflow: "hidden" }}
             >
               <div className="relative h-48">
                 <Image
                   src={lesson.imageSrc || "/placeholder.svg"}
                   alt={`Lição: ${lesson.title}`}
                   fill
-                  className="object-cover grayscale"
+                  className="object-cover grayscale rounded-image"
                   sizes="(max-width: 768px) 100vw, 33vw"
                   priority={index < 3}
+                  style={{ borderRadius: "0.5rem 0.5rem 0 0" }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/20"></div>
                 <motion.div
-                  className="absolute bottom-4 right-4 text-white bg-black/70 p-2 rounded-full"
+                  className="absolute bottom-4 right-4 text-white bg-black/70 p-2 rounded-full rounded-button"
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   animate={{
                     scale: hoveredCard === lesson.id ? 1.1 : 1,
                     rotate: hoveredCard === lesson.id ? 5 : 0,
                   }}
                   transition={{ duration: 0.3 }}
+                  style={{ borderRadius: "9999px" }}
                 >
                   {lesson.icon}
                 </motion.div>
